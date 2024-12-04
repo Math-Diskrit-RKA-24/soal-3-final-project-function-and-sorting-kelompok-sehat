@@ -32,7 +32,7 @@ def attackPlayer(attacker, target):
 
     if target["defense"]:
         dmg -= TargetDefense
-        GainingScore -= (1 / round(target["defensePower"], 2)) 
+        GainingScore -= (1 / target["defensePower"]) if target["defensePower"] > 0 else 0
 
     if dmg > 0:
         AttackerScore = round(attacker.get("score") + GainingScore, 2)
