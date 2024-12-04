@@ -32,10 +32,10 @@ def attackPlayer(attacker, target):
 
     if target["defense"]:
         dmg -= TargetDefense
-        GainingScore -= 0.2
+        GainingScore -= (1 / round(target["defensePower"], 2)) 
 
     if dmg > 0:
-        AttackerScore = attacker.get("score") + GainingScore
+        AttackerScore = round(attacker.get("score") + GainingScore, 2)
         TargetHP = target.get("health") - dmg
         setPlayer(target, "defense", False)
         setPlayer(target, "health", TargetHP)
