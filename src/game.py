@@ -44,42 +44,12 @@ def attackPlayer(attacker, target):
 
 def displayMatchResult():
     global PlayerList
-    pplist = PlayerList.copy()
+    pplist = sorted(PlayerList, key=lambda x: (-x["score"], -x["health"])) 
+    rank = 1
 
-    for i in range(len(PlayerList)):
-
-        PlayerScoreList = []
-        PlayerHealthList = []
-
-        for player in pplist:
-            PlayerScoreList.append(player["score"])
-            PlayerHealthList.append(player["health"])
-
-        MaxScore = max(PlayerScoreList)
-        if PlayerScoreList.count(MaxScore) > 1:
-          MaxIndex = []
-          MaxHealth = 0
-          for j in range(len(PlayerScoreList)):
-            if PlayerScoreList[j] == MaxScore:
-              MaxIndex.append(j)
-
-          for index in MaxIndex:
-            MaxHealth = max(pplist[index]["health"], MaxHealth)
-
-          for k in MaxIndex:
-            if pplist[k]["health"] == MaxHealth:
-                PlayerName = pplist[k]["name"]
-                PlayerScore = pplist[k]["score"]
-                PlayerHealth = pplist[k]["health"]
-
-                print(f"Rank {i+1}: {PlayerName} | Score: {PlayerScore} | Health: {PlayerHealth}")
-                pplist.pop(k)
-                MaxIndex.remove(k)
-        else:
-          MaxIndex = PlayerScoreList.index(MaxScore)
-          PlayerName = pplist[MaxIndex]["name"]
-          PlayerScore = pplist[MaxIndex]["score"]
-          PlayerHealth = pplist[MaxIndex]["health"]
-
-          print(f"Rank {i+1}: {PlayerName} | Score: {PlayerScore} | Health: {PlayerHealth}")
-          pplist.pop(MaxIndex)
+    for player in pplist:
+        PlayerName = player["name"]
+        PlayerScore = player["score"]
+        PlayerHealth = player["health"]
+        print(f"Rank {rank}: {PlayerName} | Score: {PlayerScore} | Health: {PlayerHealth}")
+        rank += 1
