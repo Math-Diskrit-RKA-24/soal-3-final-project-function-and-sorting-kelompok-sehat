@@ -2,12 +2,12 @@ from src import game as m
 
 m.initPlayers()
 
-ambalika = m.createNewPlayer(name="Ambalika")
-salya = m.createNewPlayer(name="Salya")
-byasa = m.createNewPlayer(name="Byasa")
-surasena = m.createNewPlayer(name="Surasena")
-sahadeva = m.createNewPlayer(name="Sahadeva")
-wredokara = m.createNewPlayer(name="Wredokara")
+ambalika = m.createNewPlayer(name="ambalika", damage=0, defensePower=0)
+salya = m.createNewPlayer(name="salya", damage=0, defensePower=0)
+byasa = m.createNewPlayer(name="byasa", damage=0, defensePower=0)
+surasena = m.createNewPlayer(name="surasena", damage=0, defensePower=0)
+sahadeva = m.createNewPlayer(name="sahadeva", damage=0, defensePower=0)
+wredokara = m.createNewPlayer(name="wredokara", damage=0, defensePower=0)
 
 #menambahkan pemain ke dalam game
 m.addPlayer(ambalika)
@@ -49,7 +49,7 @@ print("Round 1")
 print("Buying Phase 20 Second")
 
 #membuat list dictionary weapon
-Weapon = [{"name": "Ak47", "dmg/mag":1080, "firetime": 3, "price": 2700}, 
+Weapon = [{"name": "Ak47", "dmg/mag":1080, "firetime": 3, "price": 2700},
           {"name": "Glock0-18", "dmg/mag":600, "firetime": 3, "price":200},
           {"name": "M4A4", "dmg/mag":990, "firetime": 2.7, "price":3000},
           {"name": "USP-S", "dmg/mag":420, "firetime": 2, "price":200},
@@ -89,7 +89,7 @@ def PlayerUseWeapon(playername, weaponname):
   global PlayerList, Weapon
   weapon_data = next((w for w in Weapon if w["name"] == weaponname), None)
   if weapon_data is None:
-      print(f"Weapon {weaponname} not found!")
+      print(f"Weapon {weaponname} Tidak ditemukan!")
       return
   dps = round(weapon_data["dmg/mag"] / weapon_data["firetime"], 2)
 
@@ -97,30 +97,34 @@ def PlayerUseWeapon(playername, weaponname):
     if PlayerList[human]["name"] == playername:
       PlayerList[human]["damage"] = dps
 
+PlayerUseWeapon("ambalika", "USP-S")
+PlayerUseWeapon("salya", "Desert Eagle")
+PlayerUseWeapon("byasa", "Glock0-18")
+PlayerUseWeapon("surasena", "Desert Eagle")
+PlayerUseWeapon("sahadeva", "Desert Eagle")
+PlayerUseWeapon("wredokara", "Desert Eagle")
+
 #membuat fungsi untuk detail penyerangan
 def DetailAttack(attacker, target, time, headshot=False):
-    original_damage = attacker.get("damage")  
-    damage = attacker.get("damage")
-    dmg = damage * time
-    if headshot:
-        dmg *= 3
-    if target["defense"]:
-        m.setPlayer(target, "defensePower", dmg / 2)
-    
-    m.setPlayer(attacker, "damage", dmg)  
-    m.attackPlayer(attacker, target)  
-    m.setPlayer(attacker, "damage", original_damage) 
-    
-    print(f"pemain {attacker['name']} menyerang pemain {target['name']} selama {time} detik")
-    if target.get("health") <= 0:
-        print(f"pemain {target['name']} telah tereliminasi")
-
+  damage = attacker.get("damage")
+  dmg = damage * time
+  if headshot:
+    dmg*=3
+  if target["defense"]:
+    m.setPlayer(target, "defensePower", dmg/2)
+  m.setPlayer(attacker, "damage", dmg)
+  m.attackPlayer(attacker, target)
+  m.setPlayer(attacker, "damage", damage)
+  print(f"pemain {attacker['name']} menyerang pemain {target['name']} selama {time} detik")
+  if target.get("health") <= 0:
+    print(f"pemain {target['name']} telah tereliminasi")
+    m.setPlayer(target, "health", 0)
 
 #memulai pertandingan
 print("Round Begin!")
 
 DetailAttack(salya, wredokara, 0.5)
-DetailAttack(surasena, ambalika, 0.7, headshot = True)
+DetailAttack(surasena, ambalika, 0.2, headshot = True)
 m.displayMatchResult()
 DetailAttack(wredokara, salya, 0.3)
 DetailAttack(byasa, sahadeva, 1)
